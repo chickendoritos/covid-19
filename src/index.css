@@ -12,7 +12,12 @@ code {
     monospace;
 }
 
-
 .select-counties {
   width: 1000px;
+}
+
+.data-display {
+  margin: 0px auto;
+  display: flex;
+  justify-content: center;
 }

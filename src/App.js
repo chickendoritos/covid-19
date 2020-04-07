@@ -13,9 +13,18 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <SelectCounties />
-        <ConfirmedCases />
+        Covid-19 Display
       </header>
+      <div className='data-display'>
+        <SelectCounties />
+        </div>
+      <div className='data-display'>
+        <ConfirmedCases />
+      </div>
+      <footer>
+        Data Source: <a href='https://usafacts.org/visualizations/coronavirus-covid-19-spread-map/' target='_blank' rel='noopener noreferrer'>USAFacts</a>
+        Contact: Made by Kyle Dufrene nolakpd@gmail.com
+      </footer>
     </div>
   );
 }
