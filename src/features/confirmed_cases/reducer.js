@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
+import lodash from 'lodash';
 import csv from 'csvtojson';
 
 export const confirmedCasesReducer = createSlice({
@@ -13,22 +14,36 @@ export const confirmedCasesReducer = createSlice({
   },
   reducers: {
     set_cases: (state, action) => {
-      state.cases = action.payload;
-    },
-    select_county: (state, { payload: county_id }) => {
-      const found_county = state.cases.find(x => x.countyFIPS === county_id);
-      const copy_county = { ...found_county, name: found_county['County Name'] };
+      const { payload: cases } = action;
+      state.cases = cases;
 
-      delete copy_county.countyFIPS;
-      delete copy_county.stateFIPS;
-      delete copy_county.State;
-      delete copy_county['County Name'];
+      const counties = [];
+      // Gather counties
+      for (const c of cases) {
+        counties.push({
+          value: `${c.countyFIPS}_${c.State}`,
+          label: `${c['County Name']}, ${c.State}`
+        });
+      }
 
-      state.selectedCounties = [...state.selectedCounties, county_id];
-      state.selectedCases = [...state.selectedCases, copy_county];
+      state.counties = counties;
     },
-    remove_county: (county_id, state) => {
-      //state.selectedCounties = [...state.selectedCounties, county_id];
+    select_county: (state, { payload: selected_county}) => {
+      console.log('selected_county', selected_county);
+      const found_case = state.cases.find(x => `${x.countyFIPS}_${x.State}` === selected_county.value);
+      state.selectedCounties = [...state.selectedCounties, selected_county];
+      state.selectedCases = [...state.selectedCases, found_case];
+    },
+    remove_county: (county_name, state) => {
+      const cloned_s_cases = lodash.cloneDeep(state.selectedCases);
+      state.selectedCases = lodash.remove(cloned_s_cases, (c) => {
+        return c.name === county_name
+      });
+
+      const cloned_s_counties = lodash.cloneDeep(state.selectedCounties);
+      state.selectedCounties = lodash.remove(cloned_s_counties, (c) => {
+        return c === county_name
+      })
     }
   },
 });
@@ -43,12 +58,12 @@ export const load_cases =  () => async dispatch => {
     })
     .fromString(response.data)
     .then((jsonObj)=>{
-      console.log('jsonObj', jsonObj);
       dispatch(set_cases(jsonObj));
     })
 };
 
 // SELECTORS
+export const selectCounties = state => state.confirmed_cases.counties;
 export const selectCases = state => state.confirmed_cases.cases;
 export const selectSelectedCases = state => state.confirmed_cases.selectedCases;
 export const selectSelectedCounties = state => state.confirmed_cases.selectedCounties;

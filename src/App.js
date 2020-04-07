@@ -1,6 +1,7 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import logo from './logo.svg';
+import { SelectCounties } from './features/selectCounties';
 import { ConfirmedCases } from './features/confirmed_cases';
 import './App.css';
 import { load_cases } from './features/confirmed_cases/reducer';
@@ -12,7 +13,7 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
+        <SelectCounties />
         <ConfirmedCases />
       </header>
     </div>

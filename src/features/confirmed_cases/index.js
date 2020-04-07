@@ -10,15 +10,15 @@ export function ConfirmedCases() {
     const cases = useSelector(selectCases);
 
     const selectedCases = useSelector(selectSelectedCases);
-    const selectedCounties = useSelector(selectSelectedCounties);
 
-    if (cases.length > 0 && selectedCases.length === 0) {
-        dispatch(select_county('1001'));
-    }
+    // if (cases.length > 0 && selectedCases.length === 0) {
+    //     dispatch(select_county('22071_LA')); //22071 22069
+    //     dispatch(select_county('22051_LA')); //22071 22069
+    // }
 
-    console.log('selectedCounties length', selectedCounties);
-    console.log('selectedCases length', selectedCases);
     return (
-        <div>{selectedCases.map(x => <p key={x.countyFIPS}>{x.countyFIPS}</p>)} <Chart /></div>
+        <div>
+            {selectedCases && selectedCases.length > 0 && <Chart name='confirmed_cases' data={selectedCases} />}
+        </div>
     );
 }
