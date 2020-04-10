@@ -52,7 +52,7 @@ function drawChart(cases, name) {
     var data = window.google.visualization.arrayToDataTable(arrayDataTable);
 
     // Set chart options
-    var options = {title: 'Number of confirmed cases', width: 1000, 
+    var options = {title: 'Number of confirmed cases', width: 1500, height: 1000,
     legend: { position: 'bottom' }};
 
     // Instantiate and draw our chart, passing in some options.

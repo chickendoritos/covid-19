@@ -19,16 +19,19 @@ export function SelectCounties() {
     }
 
     return (
-        <Select 
-            isMulti
-            options={counties}
-            value={selectedCounties}
-            className='select-counties'
-            onChange={onChange}
-            menuIsOpen={menuIsOpen}
-            onInputChange={(e) => {
-                    setMenuIsOpen(e.length > 2);
-            }}
-        />
+        <div>
+            <h4>Search for any county!</h4>
+            <Select 
+                isMulti
+                options={counties}
+                value={selectedCounties}
+                className='select-counties'
+                onChange={onChange}
+                menuIsOpen={menuIsOpen}
+                onInputChange={(e) => {
+                        setMenuIsOpen(e.length > 2);
+                }}
+            />
+        </div>
     );
 }

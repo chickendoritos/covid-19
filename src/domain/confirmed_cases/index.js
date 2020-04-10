@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import {
     select_county, remove_county, selectSelectedCases, selectSelectedCounties, selectCases
   } from './reducer';
-import { Chart } from '../chart';
+import { Chart } from '../../components/chart';
 
 export function ConfirmedCases() {
     const dispatch = useDispatch();

@@ -1,10 +1,9 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import logo from './logo.svg';
-import { SelectCounties } from './features/selectCounties';
-import { ConfirmedCases } from './features/confirmed_cases';
+import { SelectCounties } from '../selectCounties';
+import { ConfirmedCases } from '../confirmed_cases';
 import './App.css';
-import { load_cases } from './features/confirmed_cases/reducer';
+import { load_cases } from '../confirmed_cases/reducer';
 
 function App() {
   const dispatch = useDispatch();
@@ -22,8 +21,12 @@ function App() {
         <ConfirmedCases />
       </div>
       <footer>
-        Data Source: <a href='https://usafacts.org/visualizations/coronavirus-covid-19-spread-map/' target='_blank' rel='noopener noreferrer'>USAFacts</a>
-        Contact: Made by Kyle Dufrene nolakpd@gmail.com
+        <p>
+          Data Source: <a href='https://usafacts.org/visualizations/coronavirus-covid-19-spread-map/' target='_blank' rel='noopener noreferrer'>USAFacts</a>
+        </p>
+        <p>
+          Contact: Made by Kyle Dufrene nolakpd@gmail.com
+        </p>
       </footer>
     </div>
   );

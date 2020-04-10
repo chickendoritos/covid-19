@@ -1,5 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit';
-import confirmedCasesReducer from '../features/confirmed_cases/reducer';
+import confirmedCasesReducer from '../domain/confirmed_cases/reducer';
 import counterReducer from '../features/counter/counterSlice';
 import Reactotron from '../ReactotronConfig'
 
