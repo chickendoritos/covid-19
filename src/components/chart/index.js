@@ -8,7 +8,7 @@ export function Chart(props) {
     google.charts.load('current', {'packages':['corechart']});
     google.charts.setOnLoadCallback(() => drawChart(data, name));
     return (
-        <div id={`chart_${name}`}></div>
+        <div id={`chart_${name}`} style={{width: '100%', height: '500px'}}></div>
     );
 }
 
@@ -51,11 +51,16 @@ function drawChart(cases, name) {
     // Create the data table.
     var data = window.google.visualization.arrayToDataTable(arrayDataTable);
 
+    const chart_element = document.getElementById(`chart_${name}`);
+    const app_element = document.getElementById(`app`);
+    console.log("app_element",app_element.offsetWidth);
+
     // Set chart options
-    var options = {title: 'Number of confirmed cases', width: 1500, height: 1000,
+    var options = { title: 'Number of confirmed cases',// height: 1000, width: 1700,
     legend: { position: 'bottom' }};
 
     // Instantiate and draw our chart, passing in some options.
-    var chart = new window.google.visualization.LineChart(document.getElementById(`chart_${name}`));
+    
+    var chart = new window.google.visualization.LineChart(chart_element);
     chart.draw(data, options);
 }

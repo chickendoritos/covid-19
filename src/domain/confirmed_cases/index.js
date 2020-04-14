@@ -17,8 +17,8 @@ export function ConfirmedCases() {
     // }
 
     return (
-        <div>
+        <>
             {selectedCases && selectedCases.length > 0 && <Chart name='confirmed_cases' data={selectedCases} />}
-        </div>
+        </>
     );
 }

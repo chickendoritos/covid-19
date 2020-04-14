@@ -28,10 +28,11 @@ export const confirmedCasesReducer = createSlice({
 
       state.counties = counties;
     },
-    select_county: (state, { payload: selected_county}) => {
-      console.log('selected_county', selected_county);
-      const found_case = state.cases.find(x => `${x.countyFIPS}_${x.State}` === selected_county.value);
-      state.selectedCounties = [...state.selectedCounties, selected_county];
+    select_county: (state, { payload: selected_county_id }) => {
+      console.log('selected_county_id', selected_county_id);
+      const found_case = state.cases.find(x => `${x.countyFIPS}_${x.State}` === selected_county_id);
+      const v = { value: selected_county_id, label: found_case['County Name'] };
+      state.selectedCounties = [...state.selectedCounties, v];
       state.selectedCases = [...state.selectedCases, found_case];
     },
     remove_county: (county_name, state) => {
@@ -50,7 +51,8 @@ export const confirmedCasesReducer = createSlice({
 
 export const { set_cases, select_county, remove_county } = confirmedCasesReducer.actions;
 
-export const load_cases =  () => async dispatch => {
+//MORE ACTIONS
+export const load_cases = selected_counties => async dispatch => {
   const csvFilePath = 'https://static.usafacts.org/public/data/covid-19/covid_confirmed_usafacts.csv';
   const response = await axios.get(csvFilePath);
   csv({
@@ -59,6 +61,9 @@ export const load_cases =  () => async dispatch => {
     .fromString(response.data)
     .then((jsonObj)=>{
       dispatch(set_cases(jsonObj));
+      for (const county of selected_counties) {
+        dispatch(select_county(county));
+      }
     })
 };
 
