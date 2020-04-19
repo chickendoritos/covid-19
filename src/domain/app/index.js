@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import qs from 'query-string';
 import { useDispatch } from 'react-redux';
 import { useLocation } from "react-router-dom";
@@ -10,13 +10,15 @@ import { load_cases } from '../confirmed_cases/reducer';
 function App() {
   const dispatch = useDispatch();
   const location = useLocation();
-  const query_params = qs.parse(location.search);
-
-  let selected_counties = [];
-  if (query_params.counties) {
-      selected_counties = query_params.counties.split(',');
-  }
-  dispatch(load_cases(selected_counties));
+  
+  useEffect(() => {
+    const query_params = qs.parse(location.search);
+    let selected_counties = [];
+    if (query_params.counties) {
+        selected_counties = query_params.counties.split(',');
+    }
+    dispatch(load_cases(selected_counties));
+  }, []);
 
   return (
     <div id="app" className="App">

@@ -1,7 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
-import axios from 'axios';
 import lodash from 'lodash';
-import csv from 'csvtojson';
+import * as cases_service from '../../services/cases';
 
 export const confirmedCasesReducer = createSlice({
   name: 'confirmed_cases',
@@ -14,57 +13,47 @@ export const confirmedCasesReducer = createSlice({
   },
   reducers: {
     set_cases: (state, action) => {
-      const { payload: cases } = action;
+      const { payload: { cases, counties } } = action;
       state.cases = cases;
-
-      const counties = [];
-      // Gather counties
-      for (const c of cases) {
-        counties.push({
-          value: `${c.countyFIPS}_${c.State}`,
-          label: `${c['County Name']}, ${c.State}`
-        });
-      }
-
       state.counties = counties;
     },
-    select_county: (state, { payload: selected_county_id }) => {
-      console.log('selected_county_id', selected_county_id);
-      const found_case = state.cases.find(x => `${x.countyFIPS}_${x.State}` === selected_county_id);
-      const v = { value: selected_county_id, label: found_case['County Name'] };
-      state.selectedCounties = [...state.selectedCounties, v];
-      state.selectedCases = [...state.selectedCases, found_case];
-    },
-    remove_county: (county_name, state) => {
-      const cloned_s_cases = lodash.cloneDeep(state.selectedCases);
-      state.selectedCases = lodash.remove(cloned_s_cases, (c) => {
-        return c.name === county_name
-      });
+    set_counties: (state, { payload: selected_county_ids }) => {
+      const selected_counties = [];
+      const selected_cases = [];
+      
+      for (const county_id of selected_county_ids) {
+        console.log('looping');
+        const c = state.cases[county_id];
+        selected_counties.push({ value: county_id, label: c['County Name'] });
+        selected_cases.push(c);
+      }
 
-      const cloned_s_counties = lodash.cloneDeep(state.selectedCounties);
-      state.selectedCounties = lodash.remove(cloned_s_counties, (c) => {
-        return c === county_name
-      })
+      //state = { ...state, selectedCounties: selected_counties, selectedCases: selected_cases};
+      state.selectedCounties = selected_counties;
+      state.selectedCases = selected_cases;
     }
   },
 });
 
-export const { set_cases, select_county, remove_county } = confirmedCasesReducer.actions;
+export const { set_cases, set_counties, remove_county } = confirmedCasesReducer.actions;
 
 //MORE ACTIONS
 export const load_cases = selected_counties => async dispatch => {
-  const csvFilePath = 'https://static.usafacts.org/public/data/covid-19/covid_confirmed_usafacts.csv';
-  const response = await axios.get(csvFilePath);
-  csv({
-    output: "json"
-    })
-    .fromString(response.data)
-    .then((jsonObj)=>{
-      dispatch(set_cases(jsonObj));
-      for (const county of selected_counties) {
-        dispatch(select_county(county));
-      }
-    })
+  const counties = [];
+  const data = await cases_service.load_cases();
+  const cases = data.reduce((obj, current) => {
+    const key = `${current.countyFIPS}_${current.State}`; 
+    counties.push({
+      value: key,
+      label: `${current['County Name']}, ${current.State}`
+    });
+    const result =  { ...obj };
+    result[key] = { ...current };
+    return result;
+  }, {});
+  
+  dispatch(set_cases({ cases, counties }));
+  dispatch(set_counties(selected_counties));
 };
 
 // SELECTORS

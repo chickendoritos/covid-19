@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import {
-    select_county, remove_county, selectSelectedCases, selectSelectedCounties, selectCases
-  } from './reducer';
+import { selectSelectedCases, selectCases } from './reducer';
 import { Chart } from '../../components/chart';
 
 export function ConfirmedCases() {

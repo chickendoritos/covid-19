@@ -13,6 +13,7 @@ export function Chart(props) {
 }
 
 function drawChart(cases, name) {
+    console.log('drawing');
     const arrayDataTable = [];
 
     // get county names
@@ -22,7 +23,7 @@ function drawChart(cases, name) {
     const date_regex = RegExp(/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{2,4})$/);
     const first_county = cases[0];
     let d = new Date();
-    d.setDate(d.getDate() - 14);
+    d.setDate(d.getDate() - 40);
 
     // Loop through properties of a county
     for (const property in first_county) {
@@ -53,7 +54,6 @@ function drawChart(cases, name) {
 
     const chart_element = document.getElementById(`chart_${name}`);
     const app_element = document.getElementById(`app`);
-    console.log("app_element",app_element.offsetWidth);
 
     // Set chart options
     var options = { title: 'Number of confirmed cases',// height: 1000, width: 1700,

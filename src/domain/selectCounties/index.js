@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import Select from 'react-select';
 import { useHistory } from "react-router-dom";
 import {
-    selectCounties, selectSelectedCounties, select_county
+    selectCounties, selectSelectedCounties, set_counties
   } from '../confirmed_cases/reducer';
 
 export function SelectCounties(props) {
@@ -13,13 +13,12 @@ export function SelectCounties(props) {
     const counties = useSelector(selectCounties);
     const selectedCounties = useSelector(selectSelectedCounties);
 
-    function onChange(selected_option) {
-        const selected_county = selected_option[selected_option.length - 1];
-        const counties_cloned = selectedCounties.map(x => x.value);
-        counties_cloned.push(selected_county.value);
+    function onChange(selected_options) {
+        console.log('selected_options', selected_options);
+        const counties_cloned = selected_options.map(x => x.value);
         const counties_string = counties_cloned.join(',');
         history.push(`?counties=${counties_string}`);
-        dispatch(select_county(selected_county.value));
+        dispatch(set_counties(counties_cloned));
     }
 
     return (
